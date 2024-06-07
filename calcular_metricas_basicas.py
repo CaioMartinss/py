@@ -49,11 +49,23 @@ plt.legend(title='Ano')
 plt.tight_layout()
 plt.show()
 
-# Gráfico comparativo mensal (mantido sem alterações)
+# Gráfico comparativo mensal (todos os anos disponíveis)
 plt.figure(figsize=(10, 6))
-plt.plot(meses, metricas_empresarial_ano_mes[metricas_empresarial_ano_mes['ano'] == metricas_empresarial_ano_mes['ano'].max()]['valor_total_mes'], marker='o', label='Empresarial', color='blue')
-plt.plot(meses, metricas_pessoal_ano_mes[metricas_pessoal_ano_mes['ano'] == metricas_pessoal_ano_mes['ano'].max()]['valor_total_mes'], marker='o', label='Pessoal', color='green')
-plt.title('Valores Totais Transacionados Mensalmente (Último Ano Disponível)')
+
+# Cores para cada tipo
+cores_empresarial = sns.color_palette("Blues", n_colors=1)  # Uma cor para empresarial
+cores_pessoal = sns.color_palette("Greens", n_colors=1)      # Uma cor para pessoal
+
+# Iterar sobre os anos disponíveis para cada tipo e plotar
+for ano, cor in zip(metricas_empresarial_ano_mes['ano'].unique(), paleta_empresarial):
+    dados_empresarial = metricas_empresarial_ano_mes[metricas_empresarial_ano_mes['ano'] == ano]
+    plt.plot(meses, dados_empresarial['valor_total_mes'], marker='o', label=f'Empresarial - {ano}', color=cor)
+
+for ano, cor in zip(metricas_pessoal_ano_mes['ano'].unique(), paleta_pessoal):
+    dados_pessoal = metricas_pessoal_ano_mes[metricas_pessoal_ano_mes['ano'] == ano]
+    plt.plot(meses, dados_pessoal['valor_total_mes'], marker='o', label=f'Pessoal - {ano}', color=cor)
+
+plt.title('Valores Totais Transacionados Mensalmente por Ano')
 plt.xlabel('Mês')
 plt.ylabel('Valor Total Transacionado')
 plt.legend()
